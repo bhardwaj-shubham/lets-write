@@ -17,6 +17,7 @@ import { LoaderCircle } from "lucide-react";
 import authService from "@/appwrite/auth";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
+import { useNavigate, Link } from "react-router-dom";
 
 const FormSchema = z.object({
 	name: z.string().min(2, {
@@ -33,6 +34,7 @@ const FormSchema = z.object({
 function Signup() {
 	const [isLoading, setIsLoading] = useState(false);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const form = useForm({
 		resolver: zodResolver(FormSchema),
@@ -54,9 +56,10 @@ function Signup() {
 			if (response) {
 				const userData = await authService.getCurrentUser();
 				if (userData) {
-					dispatch(login(userData));
+					dispatch(login({ userData }));
 				}
 				// TODO: navigate to home page
+				navigate("/");
 			}
 
 			console.log(response);
@@ -71,7 +74,7 @@ function Signup() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="space-y-8 flex flex-col items-center md:w-1/2 p-8 bg-white rounded-lg shadow-lg mx-auto mt-8 w-full"
+				className="space-y-8 flex flex-col items-center md:w-1/2 p-8 bg-secondary rounded-lg shadow-lg mx-auto mt-8 w-full"
 			>
 				<FormField
 					control={form.control}
@@ -108,7 +111,11 @@ function Signup() {
 						<FormItem className="w-3/4">
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input type="password" {...field} />
+								<Input
+									type="password"
+									{...field}
+									className="text-2xl"
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -128,9 +135,9 @@ function Signup() {
 
 			<p className="mt-2 text-center text-base text-black/60">
 				Already have an account?&nbsp;
-				<a href="#" className="text-gray-800 font-medium">
+				<Link to="/login" className="text-gray-800 font-medium">
 					SignIn
-				</a>
+				</Link>
 			</p>
 		</Form>
 	);

@@ -47,7 +47,7 @@ export class PostService {
 	}
 
 	// update post
-	async update(slug, { title, content, featuredImage, status }) {
+	async updatePost(slug, { title, content, featuredImage, status }) {
 		try {
 			const response = await this.databases.updateDocument(
 				this.databaseId,

@@ -26,7 +26,7 @@ export class AuthService {
 				throw new Error(newUserAccount?.errors[0].message);
 			}
 
-			return newUserAccount;
+			return this.login({ email, password });
 		} catch (error) {
 			throw new Error(error);
 		}

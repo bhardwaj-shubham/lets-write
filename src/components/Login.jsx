@@ -17,6 +17,7 @@ import { LoaderCircle } from "lucide-react";
 import authService from "@/appwrite/auth";
 import { login as authLogin } from "@/store/authSlice";
 import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const FormSchema = z.object({
 	email: z.string().email({
@@ -31,6 +32,7 @@ function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isError, setIsError] = useState(false);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const form = useForm({
 		resolver: zodResolver(FormSchema),
@@ -43,7 +45,7 @@ function Login() {
 	async function onSubmit(data) {
 		setIsLoading(true);
 
-		console.log(data);
+		// console.log(data);
 
 		try {
 			const session = await authService.login(data);
@@ -56,9 +58,10 @@ function Login() {
 				}
 
 				// TODO: navigate to home page
+				navigate("/");
 			}
 
-			console.log(session);
+			// console.log(session);
 		} catch (error) {
 			setIsError(true);
 			console.error(error);
@@ -71,7 +74,7 @@ function Login() {
 		<Form {...form}>
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
-				className="space-y-8 flex flex-col items-center md:w-1/2 p-8 bg-white rounded-lg shadow-lg mx-auto mt-10 w-full"
+				className="space-y-8 flex flex-col items-center md:w-1/2 p-8 bg-secondary rounded-lg shadow-lg mx-auto mt-10 w-full"
 			>
 				<FormField
 					control={form.control}
@@ -94,7 +97,11 @@ function Login() {
 						<FormItem className="w-3/4">
 							<FormLabel>Password</FormLabel>
 							<FormControl>
-								<Input type="password" {...field} />
+								<Input
+									type="password"
+									{...field}
+									className="text-xl"
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -110,7 +117,7 @@ function Login() {
 				<Button
 					type="submit"
 					disabled={isLoading}
-					className="w-3/4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+					className=" hover:bg-blue-600 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 				>
 					{isLoading ? (
 						<>
@@ -123,11 +130,14 @@ function Login() {
 				</Button>
 			</form>
 
-			<p className="mt-2 text-center text-base text-black-60">
-				Don&apos;t have any account?&nbsp;{" "}
-				<a href="#" className="hover:text-gray-600">
+			<p className="mt-8 text-center text-base text-black-60">
+				Don&apos;t have any account?&nbsp;
+				<Link
+					to="/signup"
+					className="hover:text-gray-600 hover:font-semibold"
+				>
 					Sign Up
-				</a>
+				</Link>
 			</p>
 		</Form>
 	);

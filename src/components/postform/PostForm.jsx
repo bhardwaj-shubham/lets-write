@@ -21,24 +21,31 @@ import {
 import { Button } from "@/components/ui/button";
 import RTE from "@/components/RTE";
 import { useCallback, useEffect } from "react";
-import appwriteService from "@/appwrite/post";
 import { useSelector } from "react-redux";
-// import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import postService from "@/appwrite/post";
 
 const PostFormSchema = z.object({
 	title: z.string().min(2, {
 		message: "Title must be at least 2 characters.",
 	}),
-	slug: z.string().min(2, {
-		message: "Slug must be at least 2 characters.",
-	}),
+	slug: z
+		.string()
+		.min(2, {
+			message: "Slug must be at least 2 characters.",
+		})
+		.max(36, {
+			message: "Slug must be at most 36 characters.",
+		}),
 	content: z.string().min(2, {
 		message: "Content must be at least 2 characters.",
 	}),
 	status: z.string().min(2, {
 		message: "Please select a status.",
 	}),
-	featuredImage: z.any(),
+	featuredImage: z.any().refine((file) => file?.length === 1, {
+		message: "Image is required",
+	}),
 });
 
 function PostForm({ post }) {
@@ -53,7 +60,7 @@ function PostForm({ post }) {
 		},
 	});
 
-	// const [preview, setPreview] = useState(null);
+	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
 
 	const slugTransform = useCallback((value) => {
@@ -78,50 +85,39 @@ function PostForm({ post }) {
 	}, [form, slugTransform, form.setValue]);
 
 	const onSubmit = async (data) => {
-		console.log(data);
+		// console.log(data);
 
-		const file = data.featuredImage[0]
-			? await appwriteService.uploadFile(data.featuredImage[0])
-			: null;
+		if (post) {
+			const file = data.featuredImage[0]
+				? await postService.uploadFile(data.featuredImage[0])
+				: null;
 
-		if (post.$id) {
 			if (file) {
-				appwriteService.deleteFile(post.featuredImage);
+				await postService.deleteFeaturedImage(post.featuredImage);
 			}
 
-			const newPost = await appwriteService.updatePost(post.$id, {
-				title: data.title,
-				slug: data.slug,
-				content: data.content,
-				featuredImage: file ? file.$id : "",
-				status: data.status,
-				userId: userData.$id,
+			const updatedPost = await postService.updatePost(post.$id, {
+				...data,
+				featuredImage: file ? file.$id : post.featuredImage,
 			});
 
-			if (newPost) {
-				console.log("Post updated successfully.", newPost);
-			} else {
-				console.error("Failed to update post.");
+			if (updatedPost) {
+				navigate(`/post/${updatedPost.$id}`);
 			}
 		} else {
-			const file = await appwriteService.uploadFile(
-				data.featuredImage[0]
-			);
+			const file = await postService.uploadFile(data.featuredImage[0]);
 
 			if (file) {
-				const newPost = await appwriteService.createPost({
-					title: data.title,
-					slug: data.slug,
-					content: data.content,
-					featuredImage: file.$id,
-					status: data.status,
+				const fileId = file.$id;
+				data.featuredImage = fileId;
+
+				const newPost = await postService.createPost({
+					...data,
 					userId: userData.$id,
 				});
 
 				if (newPost) {
-					console.log("Post created successfully.", newPost);
-				} else {
-					console.error("Failed to create post.");
+					navigate(`/post/${newPost.$id}`);
 				}
 			}
 		}
@@ -129,6 +125,10 @@ function PostForm({ post }) {
 
 	return (
 		<Form {...form}>
+			<h2 className="text-center font-semibold text-xl ">
+				Article Editor
+			</h2>
+
 			<form
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="space-y-8 flex flex-col items-center md:w-1/2 p-8  rounded-lg shadow-lg mx-auto mt-8 w-full bg-gray-200"
@@ -183,7 +183,6 @@ function PostForm({ post }) {
 								<RTE
 									control={form.control}
 									{...field}
-									label="Content :"
 									name="content"
 									defaultValues={form.getValues("content")}
 								/>
