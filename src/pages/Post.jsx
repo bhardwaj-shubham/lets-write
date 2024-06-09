@@ -6,10 +6,12 @@ import postService from "@/appwrite/post";
 import { Button } from "@/components/ui/button";
 import { deletePost as postDelete } from "@/store/postSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 function Post() {
 	const [post, setPost] = useState(null);
 	const [featuredImage, setFeaturedImage] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const { slug } = useParams();
 	const navigate = useNavigate();
@@ -36,12 +38,17 @@ function Post() {
 	}, [slug, navigate]);
 
 	const deletePost = async () => {
+		setLoading(true);
+
 		const status = await postService.deletePost(post.$id);
 		if (status) {
 			await postService.deleteFeaturedImage(post.featuredImage);
+			toast.success("Post deleted successfully.");
+
 			dispatch(postDelete({ postId: post.$id }));
 			navigate("/");
 		}
+		setLoading(false);
 	};
 
 	return (
@@ -59,8 +66,12 @@ function Post() {
 							<Link to={`/edit-post/${post.$id}`}>
 								<Button className="mr-3">Edit</Button>
 							</Link>
-							<Button variant="destructive" onClick={deletePost}>
-								Delete
+							<Button
+								variant="destructive"
+								onClick={deletePost}
+								disabled={loading}
+							>
+								{loading ? "Deleting..." : "Delete"}
 							</Button>
 						</div>
 					)}

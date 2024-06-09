@@ -18,6 +18,7 @@ import authService from "@/appwrite/auth";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
 	name: z.string().min(2, {
@@ -58,12 +59,16 @@ function Signup() {
 				if (userData) {
 					dispatch(login({ userData }));
 				}
+
+				toast.success("User signed up successfully.");
+
 				// TODO: navigate to home page
 				navigate("/");
 			}
 
 			console.log(response);
 		} catch (error) {
+			toast.error("An error occurred. Please try again.");
 			console.error(error);
 		}
 

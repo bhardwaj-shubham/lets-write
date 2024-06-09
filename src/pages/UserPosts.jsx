@@ -29,7 +29,7 @@ function UserPosts() {
 	}, [userId, dispatch, userStorePosts]);
 
 	return (
-		<div className="w-full py-8">
+		<div className="w-full py-8 px-8">
 			<div className="flex flex-wrap">
 				{userPosts.length !== 0 ? (
 					userPosts.map((post) => (

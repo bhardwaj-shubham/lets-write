@@ -6,6 +6,7 @@ import { login, logout } from "@/store/authSlice";
 import { Header } from "@/components/index";
 import { Footer } from "@/components/index";
 import { useSelector } from "react-redux";
+import { Toaster } from "sonner";
 
 function App() {
 	const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +46,17 @@ function App() {
 						<Header />
 						<main>
 							<Outlet />
+							<Toaster
+								position="top-right"
+								richColors
+								duration={5000}
+								closeButton
+								toastOptions={{
+									style: {
+										marginTop: "1.2rem",
+									},
+								}}
+							/>
 						</main>
 						<Footer />
 					</div>

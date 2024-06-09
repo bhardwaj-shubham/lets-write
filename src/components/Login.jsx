@@ -18,6 +18,7 @@ import authService from "@/appwrite/auth";
 import { login as authLogin } from "@/store/authSlice";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const FormSchema = z.object({
 	email: z.string().email({
@@ -30,7 +31,6 @@ const FormSchema = z.object({
 
 function Login() {
 	const [isLoading, setIsLoading] = useState(false);
-	const [isError, setIsError] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
@@ -57,13 +57,15 @@ function Login() {
 					dispatch(authLogin(userData));
 				}
 
+				toast.success("Login successful.");
+
 				// TODO: navigate to home page
 				navigate("/");
 			}
 
 			// console.log(session);
 		} catch (error) {
-			setIsError(true);
+			toast.error("Invalid email or password. Please try again.");
 			console.error(error);
 		}
 
@@ -107,12 +109,6 @@ function Login() {
 						</FormItem>
 					)}
 				/>
-
-				{isError && (
-					<p className="w-3/4 text-red-500 text-sm">
-						Invalid email or password. Please try again.
-					</p>
-				)}
 
 				<Button
 					type="submit"

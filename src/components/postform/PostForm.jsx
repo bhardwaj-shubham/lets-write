@@ -27,6 +27,7 @@ import postService from "@/appwrite/post";
 import { addPost, updatePost } from "@/store/postSlice";
 import { useDispatch } from "react-redux";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const PostFormSchema = z.object({
 	title: z.string().min(2, {
@@ -111,6 +112,8 @@ function PostForm({ post }) {
 			});
 
 			if (updatedPost) {
+				toast.success("Post updated successfully.");
+
 				dispatch(updatePost({ post: updatedPost }));
 				navigate(`/post/${updatedPost.$id}`);
 			}
@@ -127,6 +130,8 @@ function PostForm({ post }) {
 				});
 
 				if (newPost) {
+					toast.success("Post created successfully.");
+
 					dispatch(addPost({ post: newPost }));
 					navigate(`/post/${newPost.$id}`);
 				}
@@ -255,7 +260,7 @@ function PostForm({ post }) {
 					)}
 				/>
 
-				<Button>
+				<Button className="w-20" disabled={loading}>
 					{loading ? (
 						<LoaderCircle className="mr-2 h-6 w-6 animate-spin" />
 					) : (

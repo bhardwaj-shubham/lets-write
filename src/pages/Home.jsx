@@ -15,7 +15,7 @@ function Home() {
 	}
 
 	return (
-		<div className="w-full py-8 text-center px-4">
+		<div className="w-full py-8 text-center px-8">
 			<AllPosts />
 		</div>
 	);
