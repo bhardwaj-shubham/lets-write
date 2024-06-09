@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import RTE from "@/components/RTE";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import postService from "@/appwrite/post";
@@ -62,6 +62,7 @@ function PostForm({ post }) {
 
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
+	const rteRef = useRef(null);
 
 	const slugTransform = useCallback((value) => {
 		if (!value) return "";
@@ -88,6 +89,8 @@ function PostForm({ post }) {
 		// console.log(data);
 
 		if (post) {
+			console.log(post);
+
 			const file = data.featuredImage[0]
 				? await postService.uploadFile(data.featuredImage[0])
 				: null;
@@ -185,6 +188,7 @@ function PostForm({ post }) {
 									{...field}
 									name="content"
 									defaultValues={form.getValues("content")}
+									ref={rteRef}
 								/>
 							</FormControl>
 							<FormMessage />

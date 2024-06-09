@@ -49,7 +49,7 @@ function Post() {
 					<img
 						src={featuredImage}
 						alt={post.title}
-						className="rounded-full"
+						className="rounded-full w-36 object-cover"
 					/>
 
 					{isAuthor && (
