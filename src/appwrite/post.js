@@ -182,6 +182,25 @@ export class PostService {
 			throw new Error(error);
 		}
 	}
+
+	// get user posts
+	async getUserPosts(userId) {
+		try {
+			const response = await this.databases.listDocuments(
+				this.databaseId,
+				this.collectionId,
+				[Query.equal("userId", userId)]
+			);
+
+			if (response?.errors) {
+				throw new Error(response?.errors[0].message);
+			}
+
+			return response;
+		} catch (error) {
+			throw new Error(error);
+		}
+	}
 }
 
 const postService = new PostService();
