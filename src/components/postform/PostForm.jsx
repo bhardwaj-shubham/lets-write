@@ -24,6 +24,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import postService from "@/appwrite/post";
+import { addPost, updatePost } from "@/store/postSlice";
+import { useDispatch } from "react-redux";
 
 const PostFormSchema = z.object({
 	title: z.string().min(2, {
@@ -63,6 +65,7 @@ function PostForm({ post }) {
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
 	const rteRef = useRef(null);
+	const dispatch = useDispatch();
 
 	const slugTransform = useCallback((value) => {
 		if (!value) return "";
@@ -105,6 +108,7 @@ function PostForm({ post }) {
 			});
 
 			if (updatedPost) {
+				dispatch(updatePost({ post: updatedPost }));
 				navigate(`/post/${updatedPost.$id}`);
 			}
 		} else {
@@ -120,6 +124,7 @@ function PostForm({ post }) {
 				});
 
 				if (newPost) {
+					dispatch(addPost({ post: newPost }));
 					navigate(`/post/${newPost.$id}`);
 				}
 			}

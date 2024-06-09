@@ -30,8 +30,8 @@ function Header() {
 				</Link>
 
 				{authStatus && (
-					<Link to="/all-posts" className="font-medium mt-2">
-						All Posts
+					<Link to="/my-posts" className="font-medium mt-2">
+						My Posts
 					</Link>
 				)}
 
@@ -96,11 +96,11 @@ function Header() {
 
 					{authStatus && (
 						<Link
-							to="/all-posts"
+							to="/my-posts"
 							className="font-medium m-3 p-3 hover:bg-gray-50 block rounded-lg"
 							onClick={handleToggle}
 						>
-							All Posts
+							My Posts
 						</Link>
 					)}
 

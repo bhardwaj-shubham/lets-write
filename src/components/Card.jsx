@@ -1,6 +1,7 @@
 import postService from "@/appwrite/post";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { LoaderCircle } from "lucide-react";
 
 function Card({ $id, title, featuredImage }) {
 	const [image, setImage] = useState(null);
@@ -25,12 +26,16 @@ function Card({ $id, title, featuredImage }) {
 
 	return (
 		<Link to={`/post/${$id}`}>
-			<div className="w-full bg-gray-100 rounded-xl p-4 h-40 ">
-				<div className="w-full justify-center mb-4">
+			<div className="w-full bg-gray-300 rounded-xl p-4 h-60 ">
+				<div className="w-full justify-center mb-4 ">
 					{isLoading ? (
-						<h4>Loading...</h4>
+						<LoaderCircle size={40} />
 					) : (
-						<img src={image} alt={title} className="rounded-lg" />
+						<img
+							src={image}
+							alt={title}
+							className="rounded-lg w-40"
+						/>
 					)}
 				</div>
 

@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import parse from "html-react-parser";
 import postService from "@/appwrite/post";
 import { Button } from "@/components/ui/button";
+import { deletePost as postDelete } from "@/store/postSlice";
+import { useDispatch } from "react-redux";
 
 function Post() {
 	const [post, setPost] = useState(null);
@@ -15,6 +17,8 @@ function Post() {
 	const userData = useSelector((state) => state.auth.userData);
 
 	const isAuthor = post && userData ? post.userId === userData.$id : false;
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		async function getPost() {
@@ -38,6 +42,7 @@ function Post() {
 		const status = await postService.deletePost(post.$id);
 		if (status) {
 			await postService.deleteFeaturedImage(post.featuredImage);
+			dispatch(postDelete({ postId: post.$id }));
 			navigate("/");
 		}
 	};
