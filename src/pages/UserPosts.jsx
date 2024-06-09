@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 function UserPosts() {
 	const [userPosts, setUserPosts] = useState([]);
 	const userId = useSelector((state) => state.auth.userData.$id);
+	const userStorePosts = useSelector((state) => state.posts.posts);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -20,8 +21,12 @@ function UserPosts() {
 			}
 		}
 
-		getUserPosts();
-	}, [userId, dispatch]);
+		if (userStorePosts.length === 0) {
+			getUserPosts();
+		} else {
+			setUserPosts(userStorePosts);
+		}
+	}, [userId, dispatch, userStorePosts]);
 
 	return (
 		<div className="w-full py-8">

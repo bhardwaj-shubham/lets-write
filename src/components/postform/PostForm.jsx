@@ -20,12 +20,13 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import RTE from "@/components/RTE";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import postService from "@/appwrite/post";
 import { addPost, updatePost } from "@/store/postSlice";
 import { useDispatch } from "react-redux";
+import { LoaderCircle } from "lucide-react";
 
 const PostFormSchema = z.object({
 	title: z.string().min(2, {
@@ -62,6 +63,7 @@ function PostForm({ post }) {
 		},
 	});
 
+	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
 	const rteRef = useRef(null);
@@ -90,9 +92,10 @@ function PostForm({ post }) {
 
 	const onSubmit = async (data) => {
 		// console.log(data);
+		setLoading(true);
 
 		if (post) {
-			console.log(post);
+			// console.log(post);
 
 			const file = data.featuredImage[0]
 				? await postService.uploadFile(data.featuredImage[0])
@@ -129,6 +132,7 @@ function PostForm({ post }) {
 				}
 			}
 		}
+		setLoading(false);
 	};
 
 	return (
@@ -251,7 +255,13 @@ function PostForm({ post }) {
 					)}
 				/>
 
-				<Button>Submit</Button>
+				<Button>
+					{loading ? (
+						<LoaderCircle className="mr-2 h-6 w-6 animate-spin" />
+					) : (
+						"Submit"
+					)}
+				</Button>
 			</form>
 		</Form>
 	);
