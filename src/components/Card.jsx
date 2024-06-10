@@ -26,20 +26,20 @@ function Card({ $id, title, featuredImage }) {
 
 	return (
 		<Link to={`/post/${$id}`}>
-			<div className="w-full bg-gray-300 rounded-xl p-4 h-60 ">
+			<div className="w-full bg-gray-300 rounded-xl p-4 h-64 items-center text-center">
 				<div className="w-full justify-center mb-4 ">
 					{isLoading ? (
-						<LoaderCircle size={40} />
+						<LoaderCircle size={40} className="animate-spin" />
 					) : (
 						<img
 							src={image}
 							alt={title}
-							className="rounded-lg w-40"
+							className="rounded-lg w-40 object-cover h-40 mx-auto mt-2"
 						/>
 					)}
 				</div>
 
-				<h2 className="text-xl font-bold">{title}</h2>
+				<h2 className="text-lg font-bold">{title}</h2>
 			</div>
 		</Link>
 	);

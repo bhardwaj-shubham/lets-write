@@ -7,7 +7,7 @@ function Home() {
 	if (!userStatus) {
 		return (
 			<div className="w-full py-8 text-center">
-				<h1 className="text-2xl font-bold">
+				<h1 className="text-2xl font-bold mt-8">
 					Please login to view posts
 				</h1>
 			</div>

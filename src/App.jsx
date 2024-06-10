@@ -53,7 +53,7 @@ function App() {
 								closeButton
 								toastOptions={{
 									style: {
-										marginTop: "1.2rem",
+										marginTop: "2rem",
 									},
 								}}
 							/>

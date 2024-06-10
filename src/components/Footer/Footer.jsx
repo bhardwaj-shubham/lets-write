@@ -10,7 +10,7 @@ function Footer() {
 				</Link>
 				<div className="flex gap-8 text-lg">
 					<a href="#" className="text-gray-600 hover:text-gray-900">
-						<i className="fa-brands fa-twitter"></i>
+						<i className="fa-brands fa-linkedin"></i>
 					</a>
 					<a
 						href="https://github.com/bhardwaj-shubham"

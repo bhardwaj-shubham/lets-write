@@ -41,9 +41,14 @@ const PostFormSchema = z.object({
 		.max(36, {
 			message: "Slug must be at most 36 characters.",
 		}),
-	content: z.string().min(2, {
-		message: "Content must be at least 2 characters.",
-	}),
+	content: z
+		.string()
+		.min(2, {
+			message: "Content must be at least 2 characters.",
+		})
+		.max(10000, {
+			message: "Content must be at most 10000 characters.",
+		}),
 	status: z.string().min(2, {
 		message: "Please select a status.",
 	}),

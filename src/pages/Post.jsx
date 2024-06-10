@@ -62,7 +62,7 @@ function Post() {
 					/>
 
 					{isAuthor && (
-						<div className="absolute right-6 top-6 my-6">
+						<div className="absolute top-40 my-2 lg:right-6 lg:top-6 lg:my-6">
 							<Link to={`/edit-post/${post.$id}`}>
 								<Button className="mr-3">Edit</Button>
 							</Link>
@@ -81,7 +81,9 @@ function Post() {
 					<h1 className="text-2xl font-bold">{post.title}</h1>
 				</div>
 
-				<div className="browser-css">{parse(post.content)}</div>
+				<div className="browser-css w-full px-2 my-8 leading-relaxed ">
+					{parse(post.content)}
+				</div>
 			</div>
 		)
 	);
