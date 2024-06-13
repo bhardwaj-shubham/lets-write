@@ -13,6 +13,7 @@ import AddPost from "./pages/AddPost.jsx";
 import EditPost from "./pages/EditPost.jsx";
 import Post from "./pages/Post.jsx";
 import UserPosts from "./pages/UserPosts.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 			{
 				path: "/post/:slug",
 				element: <Post />,
+			},
+			{
+				path: "*",
+				element: <NotFound />,
 			},
 		],
 	},
